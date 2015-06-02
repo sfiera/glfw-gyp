@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+import argparse
+import os
+import sys
+
+os.chdir(os.path.dirname(sys.argv[0]))
+progname = sys.argv[0]
+parser = argparse.ArgumentParser()
+parser.add_argument("-m", "--mode", type=unicode, choices="dbg dev opt".split(), default="opt")
+args, remainder = parser.parse_known_args()
+
+try:
+    os.makedirs("out")
+except OSError as e:
+    if e.errno != 17:
+        raise
+
+try:
+    os.unlink("out/cur")
+except OSError as e:
+    pass
+os.symlink(args.mode, "out/cur")
+
+cmd = [
+    "gyp",
+    "--include=defaults.gypi",
+    "--format=ninja",
+    "--depth=.",
+]
+cmd += remainder
+os.execvp(cmd[0], cmd)
