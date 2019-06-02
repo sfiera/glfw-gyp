@@ -55,15 +55,15 @@ if (libglfw == "bundled") {
       ]
     } else if (target_os == "linux") {
       libs = [
-        "-lGL",
-        "-lGLU",
-        "-lm",
-        "-lpthread",
-        "-lX11",
-        "-lXcursor",
-        "-lXinerama",
-        "-lXxf86vm",
-        "-lXrandr",
+        "GL",
+        "GLU",
+        "m",
+        "pthread",
+        "X11",
+        "Xcursor",
+        "Xinerama",
+        "Xxf86vm",
+        "Xrandr",
       ]
     }
   }
