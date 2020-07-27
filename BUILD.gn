@@ -10,33 +10,36 @@ assert(libglfw == "system" || libglfw == "bundled")
 if (libglfw == "bundled") {
   static_library("libglfw") {
     sources = [
-      "glfw-3.1.1/src/context.c",
-      "glfw-3.1.1/src/init.c",
-      "glfw-3.1.1/src/input.c",
-      "glfw-3.1.1/src/monitor.c",
-      "glfw-3.1.1/src/window.c",
+      "glfw-3.3.2/src/context.c",
+      "glfw-3.3.2/src/init.c",
+      "glfw-3.3.2/src/input.c",
+      "glfw-3.3.2/src/monitor.c",
+      "glfw-3.3.2/src/window.c",
     ]
 
     if (target_os == "mac") {
       sources += [
-        "glfw-3.1.1/src/cocoa_init.m",
-        "glfw-3.1.1/src/cocoa_monitor.m",
-        "glfw-3.1.1/src/cocoa_window.m",
-        "glfw-3.1.1/src/iokit_joystick.m",
-        "glfw-3.1.1/src/mach_time.c",
-        "glfw-3.1.1/src/nsgl_context.m",
-        "glfw-3.1.1/src/posix_tls.c",
+        "glfw-3.3.2/src/cocoa_init.m",
+        "glfw-3.3.2/src/cocoa_joystick.m",
+        "glfw-3.3.2/src/cocoa_monitor.m",
+        "glfw-3.3.2/src/cocoa_time.c",
+        "glfw-3.3.2/src/cocoa_window.m",
+        "glfw-3.3.2/src/egl_context.c",
+        "glfw-3.3.2/src/nsgl_context.m",
+        "glfw-3.3.2/src/osmesa_context.c",
+        "glfw-3.3.2/src/posix_thread.c",
+        "glfw-3.3.2/src/vulkan.c",
       ]
     } else if (target_os == "linux") {
       sources += [
-        "glfw-3.1.1/src/glx_context.c",
-        "glfw-3.1.1/src/linux_joystick.c",
-        "glfw-3.1.1/src/posix_time.c",
-        "glfw-3.1.1/src/posix_tls.c",
-        "glfw-3.1.1/src/x11_init.c",
-        "glfw-3.1.1/src/x11_monitor.c",
-        "glfw-3.1.1/src/x11_window.c",
-        "glfw-3.1.1/src/xkb_unicode.c",
+        "glfw-3.3.2/src/glx_context.c",
+        "glfw-3.3.2/src/linux_joystick.c",
+        "glfw-3.3.2/src/posix_thread.c",
+        "glfw-3.3.2/src/posix_time.c",
+        "glfw-3.3.2/src/x11_init.c",
+        "glfw-3.3.2/src/x11_monitor.c",
+        "glfw-3.3.2/src/x11_window.c",
+        "glfw-3.3.2/src/xkb_unicode.c",
       ]
     }
 
@@ -45,7 +48,7 @@ if (libglfw == "bundled") {
   }
 
   config("libglfw_public") {
-    include_dirs = [ "glfw-3.1.1/include" ]
+    include_dirs = [ "glfw-3.3.2/include" ]
     if (target_os == "mac") {
       libs = [
         "Cocoa.framework",
@@ -75,8 +78,9 @@ if (libglfw == "bundled") {
     ]
     defines = [ "_GLFW_USE_CONFIG_H" ]
     include_dirs = [
-      "glfw-3.1.1/src",
-      "glfw-3.1.1/include",
+      "glfw-3.3.2/src",
+      "glfw-3.3.2/include",
+      "glfw-3.3.2/deps",
     ]
     if (target_os == "mac") {
       include_dirs += [ "src/mac" ]
@@ -87,31 +91,28 @@ if (libglfw == "bundled") {
 
   executable("boing") {
     sources = [
-      "glfw-3.1.1/examples/boing.c",
+      "glfw-3.3.2/deps/glad_gl.c",
+      "glfw-3.3.2/examples/boing.c",
     ]
-    deps = [
-      ":libglfw",
-    ]
+    deps = [ ":libglfw" ]
     configs += [ ":libglfw_private" ]
   }
 
   executable("gears") {
     sources = [
-      "glfw-3.1.1/examples/gears.c",
+      "glfw-3.3.2/deps/glad_gl.c",
+      "glfw-3.3.2/examples/gears.c",
     ]
-    deps = [
-      ":libglfw",
-    ]
+    deps = [ ":libglfw" ]
     configs += [ ":libglfw_private" ]
   }
 
   executable("wave") {
     sources = [
-      "glfw-3.1.1/examples/wave.c",
+      "glfw-3.3.2/deps/glad_gl.c",
+      "glfw-3.3.2/examples/wave.c",
     ]
-    deps = [
-      ":libglfw",
-    ]
+    deps = [ ":libglfw" ]
     configs += [ ":libglfw_private" ]
   }
 } else {
