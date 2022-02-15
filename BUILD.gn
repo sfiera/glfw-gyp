@@ -41,6 +41,19 @@ if (libglfw == "bundled") {
         "glfw-3.3.2/src/x11_window.c",
         "glfw-3.3.2/src/xkb_unicode.c",
       ]
+    } else if (target_os == "win") {
+      sources += [
+        "glfw-3.3.2/src/osmesa_context.c",
+        "glfw-3.3.2/src/egl_context.c",
+        "glfw-3.3.2/src/wgl_context.c",
+        "glfw-3.3.2/src/win32_init.c",
+        "glfw-3.3.2/src/win32_joystick.c",
+        "glfw-3.3.2/src/win32_monitor.c",
+        "glfw-3.3.2/src/win32_thread.c",
+        "glfw-3.3.2/src/win32_time.c",
+        "glfw-3.3.2/src/win32_window.c",
+        "glfw-3.3.2/src/vulkan.c",
+      ]
     }
 
     public_configs = [ ":libglfw_public" ]
@@ -68,14 +81,18 @@ if (libglfw == "bundled") {
         "Xxf86vm",
         "Xrandr",
       ]
+    } else if (target_os == "win") {
+      libs = [ "Gdi32.lib", "Shell32.lib" ]
     }
   }
 
   config("libglfw_private") {
-    cflags = [
-      "-Wall",
-      "-Wno-deprecated-declarations",
-    ]
+    if (current_toolchain != "//build/lib/win:msvc") {
+      cflags = [
+        "-Wall",
+        "-Wno-deprecated-declarations",
+      ]
+    }
     defines = [ "_GLFW_USE_CONFIG_H" ]
     include_dirs = [
       "glfw-3.3.2/src",
@@ -86,6 +103,8 @@ if (libglfw == "bundled") {
       include_dirs += [ "src/mac" ]
     } else if (target_os == "linux") {
       include_dirs += [ "src/linux" ]
+    } else if (target_os == "win") {
+      include_dirs += [ "src/win" ]
     }
   }
 
