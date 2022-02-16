@@ -82,7 +82,11 @@ if (libglfw == "bundled") {
         "Xrandr",
       ]
     } else if (target_os == "win") {
-      libs = [ "Gdi32.lib", "Shell32.lib" ]
+      if (current_toolchain == "//build/lib/win:msvc") {
+        libs = [ "Gdi32.lib", "Shell32.lib" ]
+      } else {
+        libs = [ "gdi32", "shell32" ]
+      }
     }
   }
 
